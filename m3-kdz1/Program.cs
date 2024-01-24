@@ -2,6 +2,7 @@
 using static ClassLibrary.JsonParser;
 using static ClassLibrary.DataMethods;
 using static ClassLibrary.Projects;
+using static ClassLibrary.OutputData;
 
 public class Program
 {
@@ -9,9 +10,15 @@ public class Program
     {
         do
         {
+            var dataFromFile = new List<Dictionary<string, dynamic>>();
             /*string path = GetFilePath();*/
-            string path = @"D:/Other/data_7V.json";
-            ReadJson(path);
+            int mainMenuIndex = MainMenu();
+            switch (mainMenuIndex)
+            {
+                case 1: MainMenuFirst(); break;
+                case 2: MainMenuSecond(dataFromFile); break;
+            }
+            Console.WriteLine("Нажмите ESC для выхода из программы; иначе - любую другую.");
         } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
     }
 }
