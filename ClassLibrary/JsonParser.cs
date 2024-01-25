@@ -7,9 +7,36 @@ namespace ClassLibrary
 {
     public static class JsonParser
     {
-        public static void WriteJson()
+        public static string WriteJson(List<Projects> projects)
         {
-            ;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("[");
+
+            for (int i = 0; i < projects.Count; i++)
+            {
+                var project = projects[i];
+                sb.AppendLine("  {");
+                sb.AppendLine($"    \"project_id\": {project.ProjectId},");
+                sb.AppendLine($"    \"project_name\": \"{project.ProjectName}\",");
+                sb.AppendLine($"    \"client\": \"{project.Client}\",");
+                sb.AppendLine($"    \"start_date\": \"{project.StartDate}\",");
+                sb.AppendLine($"    \"status\": \"{project.Status}\",");
+                sb.AppendLine($"    \"team_members\": [{string.Join(", ", Array.ConvertAll(project.Members, member => $"{member}"))}],");
+                sb.AppendLine($"    \"tasks\": [{string.Join(", ", Array.ConvertAll(project.Tasks, task => $"{task}"))}]");
+                sb.Append("  }");
+
+                if (i < projects.Count - 1)
+                {
+                    sb.AppendLine(",");
+                }
+                else
+                {
+                    sb.AppendLine();
+                }
+            }
+
+            sb.AppendLine("]");
+            return sb.ToString();
         }
 
         public static List<Dictionary<string, dynamic>> ReadJson(string dataFromFile)

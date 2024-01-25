@@ -167,9 +167,7 @@ namespace ClassLibrary
         {
             // Элементы главного меню.
             string[] menuItems = { "1. Сохранить данные в исходный файл с удалением.",
-                                   "2. Сохранить данные в исходный файл с добавлением в конец.",
-                                   "3. Сохранить данные в другой файл с удалением.",
-                                   "4. Сохранить данные в другой файл с добавленим в конец."
+                                   "2. Сохранить данные в другой файл с удалением.",
             };
             int selectedIndex = 0;
             ConsoleKey keyPressed;
@@ -235,7 +233,6 @@ namespace ClassLibrary
         {
             // Элементы главного меню.
             string[] menuItems = { "1. Сохранить данные в другой файл с удалением.",
-                                   "2. Сохранить данные в другой файл с добавленим в конец."
             };
             int selectedIndex = 0;
             ConsoleKey keyPressed;
@@ -307,10 +304,10 @@ namespace ClassLibrary
 
         public static List<Dictionary<string, dynamic>> MainMenuSecond(out string filePath)
         {
-            /*string filePath = GetFilePath();*/
-            filePath = @"D:/Other/data_7V.json";
+            /*filePath = GetFilePath();*/
+            filePath = @"D:/Other/data_7V2.json";
 
-            using var reader = new StreamReader(filePath);
+            using var reader = new StreamReader(filePath, Encoding.UTF8);
             Console.SetIn(reader);
             string data = GetData();
             List<Dictionary<string, dynamic>> convertedData = ReadJson(data);
@@ -406,65 +403,88 @@ namespace ClassLibrary
         {
             int filterInteger = GetFilterInteger();
             exemplares.RemoveAll(p => p.ProjectId != filterInteger);
-            PrintExemplares(exemplares);
+            PrintExemplares(exemplares, 1);
         }
 
         public static void FilterMenu16(List<Projects> exemplares)
         {
             string filterString = GetFilterString().ToLower();
             exemplares.RemoveAll(p => p.ProjectName.ToLower() != filterString);
-            PrintExemplares(exemplares);
+            PrintExemplares(exemplares, 2);
         }
 
         public static void FilterMenu17(List<Projects> exemplares)
         {
             string filterString = GetFilterString().ToLower();
             exemplares.RemoveAll(p => p.Client.ToLower() != filterString);
-            PrintExemplares(exemplares);
+            PrintExemplares(exemplares, 3);
         }
         public static void FilterMenu18(List<Projects> exemplares)
         {
             string filterString = GetFilterString();
             exemplares.RemoveAll(p => p.StartDate != filterString);
-            PrintExemplares(exemplares);
+            PrintExemplares(exemplares, 4);
         }
         public static void FilterMenu19(List<Projects> exemplares)
         {
             string filterString = GetFilterString().ToLower();
             exemplares.RemoveAll(p => p.Status.ToLower() != filterString);
-            PrintExemplares(exemplares);
+            PrintExemplares(exemplares, 5);
         }
         public static void FilterMenu20(List<Projects> exemplares)
         {
             int filterInteger = GetFilterInteger();
             exemplares.RemoveAll(p => p.Members.Length != filterInteger);
-            PrintExemplares(exemplares);
+            PrintExemplares(exemplares, 6);
         }
         public static void FilterMenu21(List<Projects> exemplares)
         {
             int filterInteger = GetFilterInteger();
             exemplares.RemoveAll(p => p.Tasks.Length != filterInteger);
-            PrintExemplares(exemplares);
+            PrintExemplares(exemplares, 7);
         }
 
         public static void SaveMenu1(string filePath, List<Projects> exemplares)
-        {
-            Console.WriteLine("Данные успешно сохранены!");
+        {   
+            TextWriter originalConsoleOut = Console.Out;
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    // Перенаправляем стандартный поток вывода в файл
+                    Console.SetOut(writer);
+
+                    Console.WriteLine(WriteJson(exemplares));
+                }
+            }
+            finally
+            {
+                // Возвращаем стандартный поток вывода обратно в консоль
+                Console.SetOut(originalConsoleOut);
+                Console.WriteLine("Данные успешно сохранены!");
+            }
         }
 
-        public static void SaveMenu2(string filePath, List<Projects> exemplares)
+        public static void SaveMenu2(List<Projects> exemplares)
         {
-            Console.WriteLine("Данные успешно сохранены!");
-        }
+            TextWriter originalConsoleOut = Console.Out;
+            string filePath = GetFilePath();
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    // Перенаправляем стандартный поток вывода в файл
+                    Console.SetOut(writer);
 
-        public static void SaveMenu3(List<Projects> exemplares)
-        {
-            Console.WriteLine("Данные успешно сохранены!");
-        }
-
-        public static void SaveMenu4(List<Projects> exemplares)
-        {
-            Console.WriteLine("Данные успешно сохранены!");
+                    Console.WriteLine(WriteJson(exemplares));
+                }
+            }
+            finally
+            {
+                // Возвращаем стандартный поток вывода обратно в консоль
+                Console.SetOut(originalConsoleOut);
+                Console.WriteLine("Данные успешно сохранены!");
+            }
         }
 
         private static void PrintExemplares(List<Projects> projects, int n = 0)

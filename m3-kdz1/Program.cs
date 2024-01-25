@@ -67,8 +67,7 @@ public class Program
                 int saveMenuIndex = SaveMenuWithoutOriginalFile();
                 switch (saveMenuIndex)
                 {
-                    case 3: SaveMenu3(exemplares); break;
-                    case 4: SaveMenu4(exemplares); break;
+                    case 1: SaveMenu2(exemplares); break;
                 }
             }
             else if (mainMenuIndex == 2)
@@ -77,9 +76,7 @@ public class Program
                 switch (saveMenuIndex)
                 {
                     case 1: SaveMenu1(filePath, exemplares); break;
-                    case 2: SaveMenu2(filePath, exemplares); break;
-                    case 3: SaveMenu3(exemplares); break;
-                    case 4: SaveMenu4(exemplares); break;
+                    case 2: SaveMenu2(exemplares); break;
                 }
             }
             Console.WriteLine("Нажмите ESC для выхода из программы; иначе - любую другую.");
