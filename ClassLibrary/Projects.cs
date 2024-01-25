@@ -7,8 +7,8 @@
         readonly string? _client;
         readonly string? _startDate;
         readonly string? _status;
-        readonly List<string>? _members;
-        readonly List<string>? _tasks;
+        readonly string[]? _members;
+        readonly string[]? _tasks;
 
         public int ProjectId
         {
@@ -35,12 +35,12 @@
             get { return _status; }
         }
 
-        public List<string>? Members
+        public string[]? Members
         {
             get { return _members; }
         }
 
-        public List<string>? Tasks
+        public string[]? Tasks
         {
             get { return _tasks; }
         }
@@ -50,8 +50,8 @@
                         string client, 
                         string startDate, 
                         string status, 
-                        List<string> members, 
-                        List<string> tasks)
+                        string[] members, 
+                        string[] tasks)
         {
             _projectId = projectId;
             _projectName = projectName;
