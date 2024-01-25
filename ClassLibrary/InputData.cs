@@ -2,8 +2,15 @@
 
 namespace ClassLibrary
 {
+    /// <summary>
+    /// Работает с входными данными
+    /// </summary>
     public class InputData
     {
+        /// <summary>
+        /// Ввод пути к файлу
+        /// </summary>
+        /// <returns>Строка - путь до файла</returns>
         public static string GetFilePath()
         {
             char[] invalidChars = Path.GetInvalidPathChars();
@@ -22,6 +29,10 @@ namespace ClassLibrary
             return path;
         }
 
+        /// <summary>
+        /// Ввод числа, по которому будет произведена фильтрация
+        /// </summary>
+        /// <returns>Число-фильтр</returns>
         public static int GetFilterInteger()
         {
             Console.Write("Введите число: ");
@@ -38,6 +49,10 @@ namespace ClassLibrary
             return num;
         }
 
+        /// <summary>
+        /// Ввод строки, по которому будет произведена фильтрация
+        /// </summary>
+        /// <returns>Строка-фильтр</returns>
         public static string GetFilterString()
         {
             Console.Write("Введите строку: ");

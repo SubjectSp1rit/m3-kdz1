@@ -2,12 +2,20 @@
 
 namespace ClassLibrary
 {
+    /// <summary>
+    /// Работает с данными
+    /// </summary>
     public class DataMethods
     {
+        /// <summary>
+        /// Собирает данные из консоли
+        /// </summary>
+        /// <returns></returns>
         public static string GetData()
         {
             StringBuilder rawData = new StringBuilder();
             string? element;
+            // Алгоритм ПСП. Когда закрывается последняя квадратная скобка - JSON файл подошел к концу
             int balance = 0;
             while (true)
             {
@@ -34,6 +42,11 @@ namespace ClassLibrary
             return data;
         }
 
+        /// <summary>
+        /// Создает список экземпляров класса Projects на основании списка словарей
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static List<Projects> CreateProjectsExemplares(List<Dictionary<string, dynamic>> data)
         {
             var exemplares = new List<Projects>();

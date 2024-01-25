@@ -1,14 +1,18 @@
 ﻿namespace ClassLibrary
 {
+    /// <summary>
+    /// Экземплярный класс, хранящий проекты из JSON файла
+    /// </summary>
     public class Projects
     {
-        readonly int _projectId;
-        readonly string? _projectName;
-        readonly string? _client;
-        readonly string? _startDate;
-        readonly string? _status;
-        readonly string[]? _members;
-        readonly string[]? _tasks;
+        // Поля класса, закрытые для записи вне конструктора класса
+        readonly int _projectId; // project_id
+        readonly string? _projectName; // project_name
+        readonly string? _client; // client
+        readonly string? _startDate; // start_date
+        readonly string? _status; // status
+        readonly string[]? _members; // team_members
+        readonly string[]? _tasks; // tasks
 
         public int ProjectId
         {

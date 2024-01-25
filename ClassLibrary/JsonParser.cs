@@ -5,8 +5,16 @@ using static ClassLibrary.DataMethods;
 
 namespace ClassLibrary
 {
+    /// <summary>
+    /// Работа с JSON-данными
+    /// </summary>
     public static class JsonParser
     {
+        /// <summary>
+        /// Конвертирует список экземпляров класса в готовый JSON-формат
+        /// </summary>
+        /// <param name="projects">Список экземпляров класса</param>
+        /// <returns>Строку - готовые данные для занесения в файл в формате JSON</returns>
         public static string WriteJson(List<Projects> projects)
         {
             StringBuilder sb = new StringBuilder();
@@ -39,10 +47,14 @@ namespace ClassLibrary
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Конвертирует прочитанные данные из файла типа string в список словарей
+        /// </summary>
+        /// <param name="dataFromFile">Данные из файла типа string</param>
+        /// <returns></returns>
         public static List<Dictionary<string, dynamic>> ReadJson(string dataFromFile)
         {
             var data = new List<Dictionary<string, dynamic>>();
-
 
             string pattern = "\"project_id\":\\s*(\\d+),\\s*" +
                              "\"project_name\":\\s*\"([^\"]*)\",\\s*" +
