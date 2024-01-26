@@ -23,7 +23,8 @@ namespace ClassLibrary
             string[] menuItems = { "1. Ввести данные через консоль.",
                                    "2. Ввести путь до файла с данными.",
                                    "3. Включить музыку.",
-                                   "4. Выключить музыку."
+                                   "4. Выключить музыку.",
+                                   "5. Сменить песню на альтернативную."
             };
             int selectedIndex = 0;
             ConsoleKey keyPressed;
@@ -183,6 +184,7 @@ namespace ClassLibrary
             // Элементы главного меню.
             string[] menuItems = { "1. Сохранить данные в исходный файл с удалением.",
                                    "2. Сохранить данные в другой файл с удалением.",
+                                   "3. Выход без сохранения."
             };
             int selectedIndex = 0;
             ConsoleKey keyPressed;
@@ -252,6 +254,7 @@ namespace ClassLibrary
         {
             // Элементы главного меню.
             string[] menuItems = { "1. Сохранить данные в другой файл с удалением.",
+                                   "2. Выход без сохранения."
             };
             int selectedIndex = 0;
             ConsoleKey keyPressed;
@@ -319,12 +322,20 @@ namespace ClassLibrary
         /// <returns>Список словарей, полученный путем преобразования JSON</returns>
         public static List<Dictionary<string, dynamic>> MainMenuFirst()
         {
-            Console.WriteLine("Введите данные JSON-файла ниже:");
-            // Получение данных из консоли
-            string data = GetData();
-            // Преобразование string-данных в список словарей
-            List<Dictionary<string, dynamic>> convertedData = ReadJson(data);
-            return convertedData;
+            try
+            {
+                Console.WriteLine("Введите данные JSON-файла ниже:");
+                // Получение данных из консоли
+                string data = GetData();
+                // Преобразование string-данных в список словарей
+                List<Dictionary<string, dynamic>> convertedData = ReadJson(data);
+                return convertedData;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return new List<Dictionary<string, dynamic>>();
+            }
         }
 
         /// <summary>
@@ -333,236 +344,434 @@ namespace ClassLibrary
         /// <returns>Список словарей, полученный путем преобразования JSON</returns>
         public static List<Dictionary<string, dynamic>> MainMenuSecond(out string filePath)
         {
-            /*filePath = GetFilePath();*/
-            filePath = @"D:/Other/data_7V2.json";
+            try
+            {
+                filePath = GetFilePath();
 
-            // Перенаправление потока ввода
-            using var reader = new StreamReader(filePath, Encoding.UTF8);
-            Console.SetIn(reader);
-            // Получение данных
-            string data = GetData();
-            // Преобразование string-данных в список словарей
-            List<Dictionary<string, dynamic>> convertedData = ReadJson(data);
-            // Возвращение стандартного потока ввода в консоль
-            Console.SetIn(new StreamReader(Console.OpenStandardInput()));
-            return convertedData;
+                // Перенаправление потока ввода
+                using var reader = new StreamReader(filePath, Encoding.UTF8);
+                Console.SetIn(reader);
+                // Получение данных
+                string data = GetData();
+                // Преобразование string-данных в список словарей
+                List<Dictionary<string, dynamic>> convertedData = ReadJson(data);
+                // Возвращение стандартного потока ввода в консоль
+                Console.SetIn(new StreamReader(Console.OpenStandardInput()));
+                return convertedData;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                filePath = default;
+                return new List<Dictionary<string, dynamic>>();
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю project_id в порядке возрастания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu1(List<Projects> exemplares)
+        public static bool FilterMenu1(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => x.ProjectId.CompareTo(y.ProjectId));
-            PrintExemplares(exemplares, 1);
+            try
+            {
+                exemplares.Sort((x, y) => x.ProjectId.CompareTo(y.ProjectId));
+                bool success = PrintExemplares(exemplares, 1);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю project_id в порядке убывания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu2(List<Projects> exemplares)
+        public static bool FilterMenu2(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => y.ProjectId.CompareTo(x.ProjectId));
-            PrintExemplares(exemplares, 1);
+            try
+            {
+                exemplares.Sort((x, y) => y.ProjectId.CompareTo(x.ProjectId));
+                bool success = PrintExemplares(exemplares, 1);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю project_name в порядке возрастания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu3(List<Projects> exemplares)
+        public static bool FilterMenu3(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => x.ProjectName.CompareTo(y.ProjectName));
-            PrintExemplares(exemplares, 2);
+            try
+            {
+                exemplares.Sort((x, y) => x.ProjectName.CompareTo(y.ProjectName));
+                bool success = PrintExemplares(exemplares, 2);
+                return success;
+            }            
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю project_name в порядке убывания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu4(List<Projects> exemplares)
+        public static bool FilterMenu4(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => y.ProjectName.CompareTo(x.ProjectName));
-            PrintExemplares(exemplares, 2);
+            try
+            {
+                exemplares.Sort((x, y) => y.ProjectName.CompareTo(x.ProjectName));
+                bool success = PrintExemplares(exemplares, 2);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю client в порядке возрастания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu5(List<Projects> exemplares)
+        public static bool FilterMenu5(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => x.Client.CompareTo(y.Client));
-            PrintExemplares(exemplares, 3);
+            try
+            {
+                exemplares.Sort((x, y) => x.Client.CompareTo(y.Client));
+                bool success = PrintExemplares(exemplares, 3);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю client в порядке убывания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu6(List<Projects> exemplares)
+        public static bool FilterMenu6(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => y.Client.CompareTo(x.Client));
-            PrintExemplares(exemplares, 3);
+            try
+            {
+                exemplares.Sort((x, y) => y.Client.CompareTo(x.Client));
+                bool success = PrintExemplares(exemplares, 3);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю start_date в порядке возрастания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu7(List<Projects> exemplares)
+        public static bool FilterMenu7(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => DateTime.Parse(x.StartDate).CompareTo(DateTime.Parse(y.StartDate)));
-            PrintExemplares(exemplares, 4);
+            try
+            {
+                exemplares.Sort((x, y) => DateTime.Parse(y.StartDate).CompareTo(DateTime.Parse(x.StartDate)));
+                bool success = PrintExemplares(exemplares, 4);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю start_date в порядке убывания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu8(List<Projects> exemplares)
+        public static bool FilterMenu8(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => DateTime.Parse(y.StartDate).CompareTo(DateTime.Parse(x.StartDate)));
-            PrintExemplares(exemplares, 4);
+            try
+            {
+                exemplares.Sort((x, y) => DateTime.Parse(x.StartDate).CompareTo(DateTime.Parse(y.StartDate)));
+                bool success = PrintExemplares(exemplares, 4);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю status в порядке возрастания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu9(List<Projects> exemplares)
+        public static bool FilterMenu9(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => x.Status.CompareTo(y.Status));
-            PrintExemplares(exemplares, 5);
+            try
+            {
+                exemplares.Sort((x, y) => x.Status.CompareTo(y.Status));
+                bool success = PrintExemplares(exemplares, 5);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю status в порядке убывания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu10(List<Projects> exemplares)
+        public static bool FilterMenu10(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => y.Status.CompareTo(x.Status));
-            PrintExemplares(exemplares, 5);
+            try
+            {
+
+                exemplares.Sort((x, y) => y.Status.CompareTo(x.Status));
+                bool success = PrintExemplares(exemplares, 5);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю team_members в порядке возрастания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu11(List<Projects> exemplares)
+        public static bool FilterMenu11(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => x.Members.Length.CompareTo(y.Members.Length));
-            PrintExemplares(exemplares, 6);
+            try
+            {
+                exemplares.Sort((x, y) => x.Members.Length.CompareTo(y.Members.Length));
+                bool success = PrintExemplares(exemplares, 6);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю team_members в порядке убывания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu12(List<Projects> exemplares)
+        public static bool FilterMenu12(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => y.Members.Length.CompareTo(x.Members.Length));
-            PrintExemplares(exemplares, 6);
+            try
+            {
+                exemplares.Sort((x, y) => y.Members.Length.CompareTo(x.Members.Length));
+                bool success = PrintExemplares(exemplares, 6);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю tasks в порядке возрастания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu13(List<Projects> exemplares)
+        public static bool FilterMenu13(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => x.Tasks.Length.CompareTo(y.Tasks.Length));
-            PrintExemplares(exemplares, 7);
+            try
+            {
+                exemplares.Sort((x, y) => x.Tasks.Length.CompareTo(y.Tasks.Length));
+                bool success = PrintExemplares(exemplares, 7);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отсортировать по полю tasks в порядке убывания
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu14(List<Projects> exemplares)
+        public static bool FilterMenu14(List<Projects> exemplares)
         {
-            exemplares.Sort((x, y) => y.Tasks.Length.CompareTo(x.Tasks.Length));
-            PrintExemplares(exemplares, 7);
+            try
+            {
+                exemplares.Sort((x, y) => y.Tasks.Length.CompareTo(x.Tasks.Length));
+                bool success = PrintExemplares(exemplares, 7);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отфильтровать по полю project_id
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu15(List<Projects> exemplares)
+        public static bool FilterMenu15(List<Projects> exemplares)
         {
-            int filterInteger = GetFilterInteger();
-            exemplares.RemoveAll(p => p.ProjectId != filterInteger);
-            PrintExemplares(exemplares, 1);
+            try
+            {
+                int filterInteger = GetFilterInteger();
+                exemplares.RemoveAll(p => p.ProjectId != filterInteger);
+                bool success = PrintExemplares(exemplares, 1);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отфильтровать по полю project_name
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu16(List<Projects> exemplares)
+        public static bool FilterMenu16(List<Projects> exemplares)
         {
-            string filterString = GetFilterString().ToLower();
-            exemplares.RemoveAll(p => p.ProjectName.ToLower() != filterString);
-            PrintExemplares(exemplares, 2);
+            try
+            {
+                string filterString = GetFilterString().ToLower();
+                exemplares.RemoveAll(p => p.ProjectName.ToLower() != filterString);
+                bool success = PrintExemplares(exemplares, 2);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отфильтровать по полю client
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu17(List<Projects> exemplares)
+        public static bool FilterMenu17(List<Projects> exemplares)
         {
-            string filterString = GetFilterString().ToLower();
-            exemplares.RemoveAll(p => p.Client.ToLower() != filterString);
-            PrintExemplares(exemplares, 3);
+            try
+            {
+                string filterString = GetFilterString().ToLower();
+                exemplares.RemoveAll(p => p.Client.ToLower() != filterString);
+                bool success = PrintExemplares(exemplares, 3);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отфильтровать по полю start_date
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu18(List<Projects> exemplares)
+        public static bool FilterMenu18(List<Projects> exemplares)
         {
-            string filterString = GetFilterString();
-            exemplares.RemoveAll(p => p.StartDate != filterString);
-            PrintExemplares(exemplares, 4);
+            try
+            {
+                string filterString = GetFilterString();
+                exemplares.RemoveAll(p => p.StartDate != filterString);
+                bool success = PrintExemplares(exemplares, 4);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отфильтровать по полю status
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu19(List<Projects> exemplares)
+        public static bool FilterMenu19(List<Projects> exemplares)
         {
-            string filterString = GetFilterString().ToLower();
-            exemplares.RemoveAll(p => p.Status.ToLower() != filterString);
-            PrintExemplares(exemplares, 5);
+            try
+            {
+                string filterString = GetFilterString().ToLower();
+                exemplares.RemoveAll(p => p.Status.ToLower() != filterString);
+                bool success = PrintExemplares(exemplares, 5);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отфильтровать по полю team_members (количеству)
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu20(List<Projects> exemplares)
+        public static bool FilterMenu20(List<Projects> exemplares)
         {
-            int filterInteger = GetFilterInteger();
-            exemplares.RemoveAll(p => p.Members.Length != filterInteger);
-            PrintExemplares(exemplares, 6);
+            try
+            {
+                int filterInteger = GetFilterInteger();
+                exemplares.RemoveAll(p => p.Members.Length != filterInteger);
+                bool success = PrintExemplares(exemplares, 6);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
         /// Отфильтровать по полю tasks (количеству)
         /// </summary>
         /// <param name="exemplares">Список экземпляров класса Projects</param>
-        public static void FilterMenu21(List<Projects> exemplares)
+        public static bool FilterMenu21(List<Projects> exemplares)
         {
-            int filterInteger = GetFilterInteger();
-            exemplares.RemoveAll(p => p.Tasks.Length != filterInteger);
-            PrintExemplares(exemplares, 7);
+            try
+            {
+                int filterInteger = GetFilterInteger();
+                exemplares.RemoveAll(p => p.Tasks.Length != filterInteger);
+                bool success = PrintExemplares(exemplares, 7);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
@@ -625,62 +834,71 @@ namespace ClassLibrary
         /// </summary>
         /// <param name="projects"></param>
         /// <param name="n"></param>
-        private static void PrintExemplares(List<Projects> projects, int n = 0)
+        private static bool PrintExemplares(List<Projects> projects, int n = 0)
         {
-            // Если данные отсутствуют - метод завершает работу
-            if (projects.Count == 0)
+            try
             {
-                Console.WriteLine("Oops...Нет данных для вывода.");
-                return;
-            }
-
-            // Определение необходимой ширины для каждого столбца (в зависимости от длины самого длинного элемента)
-            int projectIdWidth = projects.Max(x => x.ProjectId.ToString().Length) + 2;
-            int projectNameWidth = projects.Max(x => x.ProjectName.Length) + 2;
-            int clientWidth = projects.Max(x => x.Client.Length) + 2;
-            int startDateWidth = projects.Max(x => x.StartDate.Length) + 2;
-            int statusWidth = projects.Max(x => x.Status.Length) + 2;
-            int membersWidth = projects.Max(x => x.Members.Max(y => y.Length)) + 2;
-            int tasksWidth = projects.Max(x => x.Tasks.Max(y => y.Length)) + 2;
-
-            // Заголовки столбцов
-            string[] headers = { "ID", "Name", "Client", "Start Date", "Status", "Members", "Tasks" };
-            // Ширина столбцов
-            int[] columnWidths = { projectIdWidth, projectNameWidth, clientWidth, startDateWidth, statusWidth, membersWidth, tasksWidth };
-
-            // Печать заголовков
-            Console.Write("|");
-            for (int i = 0; i < headers.Length; i++)
-            {
-                PrintColored(headers[i], columnWidths[i], i + 1, n);
-                Console.Write("|");
-            }
-            Console.WriteLine();
-            Console.WriteLine(new string('-', columnWidths.Sum() + headers.Length));
-
-            // Печать строк таблицы
-            foreach (var project in projects)
-            {
-                int maxRows = Math.Max(project.Members.Length, project.Tasks.Length);
-                for (int row = 0; row < maxRows; row++)
+                // Если данные отсутствуют - метод завершает работу
+                if (projects.Count == 0)
                 {
-                    Console.Write("|");
-                    PrintColored(row == 0 ? project.ProjectId.ToString() : "", columnWidths[0], 1, n);
-                    Console.Write("|");
-                    PrintColored(row == 0 ? project.ProjectName : "", columnWidths[1], 2, n);
-                    Console.Write("|");
-                    PrintColored(row == 0 ? project.Client : "", columnWidths[2], 3, n);
-                    Console.Write("|");
-                    PrintColored(row == 0 ? project.StartDate : "", columnWidths[3], 4, n);
-                    Console.Write("|");
-                    PrintColored(row == 0 ? project.Status : "", columnWidths[4], 5, n);
-                    Console.Write("|");
-                    PrintColored(row < project.Members.Length ? project.Members[row] : "", columnWidths[5], 6, n);
-                    Console.Write("|");
-                    PrintColored(row < project.Tasks.Length ? project.Tasks[row] : "", columnWidths[6], 7, n);
-                    Console.WriteLine("|");
+                    Console.WriteLine("Oops...Нет данных для вывода.");
+                    return false;
                 }
+
+                // Определение необходимой ширины для каждого столбца (в зависимости от длины самого длинного элемента)
+                int projectIdWidth = projects.Max(x => x.ProjectId.ToString().Length) + 2;
+                int projectNameWidth = projects.Max(x => x.ProjectName.Length) + 2;
+                int clientWidth = projects.Max(x => x.Client.Length) + 2;
+                int startDateWidth = projects.Max(x => x.StartDate.Length) + 2;
+                int statusWidth = projects.Max(x => x.Status.Length) + 2;
+                int membersWidth = projects.Max(x => x.Members.Max(y => y.Length)) + 2;
+                int tasksWidth = projects.Max(x => x.Tasks.Max(y => y.Length)) + 2;
+
+                // Заголовки столбцов
+                string[] headers = { "ID", "Name", "Client", "Start Date", "Status", "Members", "Tasks" };
+                // Ширина столбцов
+                int[] columnWidths = { projectIdWidth, projectNameWidth, clientWidth, startDateWidth, statusWidth, membersWidth, tasksWidth };
+
+                // Печать заголовков
+                Console.Write("|");
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    PrintColored(headers[i], columnWidths[i], i + 1, n);
+                    Console.Write("|");
+                }
+                Console.WriteLine();
                 Console.WriteLine(new string('-', columnWidths.Sum() + headers.Length));
+
+                // Печать строк таблицы
+                foreach (var project in projects)
+                {
+                    int maxRows = Math.Max(project.Members.Length, project.Tasks.Length);
+                    for (int row = 0; row < maxRows; row++)
+                    {
+                        Console.Write("|");
+                        PrintColored(row == 0 ? project.ProjectId.ToString() : "", columnWidths[0], 1, n);
+                        Console.Write("|");
+                        PrintColored(row == 0 ? project.ProjectName : "", columnWidths[1], 2, n);
+                        Console.Write("|");
+                        PrintColored(row == 0 ? project.Client : "", columnWidths[2], 3, n);
+                        Console.Write("|");
+                        PrintColored(row == 0 ? project.StartDate : "", columnWidths[3], 4, n);
+                        Console.Write("|");
+                        PrintColored(row == 0 ? project.Status : "", columnWidths[4], 5, n);
+                        Console.Write("|");
+                        PrintColored(row < project.Members.Length ? project.Members[row] : "", columnWidths[5], 6, n);
+                        Console.Write("|");
+                        PrintColored(row < project.Tasks.Length ? project.Tasks[row] : "", columnWidths[6], 7, n);
+                        Console.WriteLine("|");
+                    }
+                    Console.WriteLine(new string('-', columnWidths.Sum() + headers.Length));
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+                return false;
             }
         }
 
@@ -693,9 +911,16 @@ namespace ClassLibrary
         /// <param name="highlightColumn"></param>
         private static void PrintColored(string text, int width, int columnNumber, int highlightColumn)
         {
-            if (columnNumber == highlightColumn) Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(text.PadRight(width));
-            Console.ResetColor();
+            try
+            {
+                if (columnNumber == highlightColumn) Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(text.PadRight(width));
+                Console.ResetColor();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла неизвестная ошибка: {ex.Message}");
+            }
         }
     }
 }

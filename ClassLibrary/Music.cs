@@ -8,6 +8,7 @@ namespace ClassLibrary
     public class Music
     {
         private WindowsMediaPlayer player;
+        private string songPath = @"song1.m4a";
 
         public Music()
         {
@@ -18,9 +19,9 @@ namespace ClassLibrary
         /// Запуск музыки по переданному пути
         /// </summary>
         /// <param name="path">путь до песни</param>
-        public void PlayMusic(string path)
+        public void PlayMusic()
         {
-            player.URL = path;
+            player.URL = songPath;
             player.controls.play();
             // Зацикливание музыки
             player.settings.setMode("loop", true);
@@ -32,6 +33,24 @@ namespace ClassLibrary
         public void StopMusic()
         {
             player.controls.stop();
+        }
+
+        /// <summary>
+        /// Смена песни на альтернативную
+        /// </summary>
+        public void ChangeSong()
+        {
+            StopMusic();
+            if (songPath == @"song1.m4a")
+            {
+                Console.WriteLine("Песня изменена на 2!");
+                songPath = @"song2.m4a";
+            }
+            else if (songPath == @"song2.m4a")
+            {
+                Console.WriteLine("Песня изменена на 1!");
+                songPath = @"song1.m4a";
+            }
         }
     }
 }

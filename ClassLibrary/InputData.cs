@@ -1,4 +1,6 @@
-﻿using System.Transactions;
+﻿using System.Linq;
+using System;
+using System.Transactions;
 
 namespace ClassLibrary
 {
@@ -13,20 +15,31 @@ namespace ClassLibrary
         /// <returns>Строка - путь до файла</returns>
         public static string GetFilePath()
         {
-            char[] invalidChars = Path.GetInvalidPathChars();
-
-            Console.Write("Введите путь до файла: ");
-            string? path = Console.ReadLine();
-            while (true)
+            try
             {
-                if (!path.Intersect(invalidChars).Any() || path == null)
+                char[] invalidChars = Path.GetInvalidPathChars();
+
+                Console.Write("Введите путь до файла: ");
+                string? path = Console.ReadLine();
+                while (true)
                 {
-                    break;
+                    if (path.Intersect(invalidChars).Any() || path == null)
+                    {
+                        Console.Write("Неправильный путь! Введите путь снова: ");
+                        path = Console.ReadLine();
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                Console.Write("Неправильный путь! Введите путь снова: ");
-                path = Console.ReadLine();
+                return path;
             }
-            return path;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла ошибка при вводе пути: {ex.Message}");
+                return "";
+            }
         }
 
         /// <summary>
@@ -35,18 +48,26 @@ namespace ClassLibrary
         /// <returns>Число-фильтр</returns>
         public static int GetFilterInteger()
         {
-            Console.Write("Введите число: ");
-            bool success = int.TryParse(Console.ReadLine(), out int num);
-            while (true)
+            try
             {
-                if (success)
+                Console.Write("Введите число: ");
+                bool success = int.TryParse(Console.ReadLine(), out int num);
+                while (true)
                 {
-                    break;
+                    if (success)
+                    {
+                        break;
+                    }
+                    Console.Write("Ошибка! Введите корректное значение: ");
+                    success = int.TryParse(Console.ReadLine(), out num);
                 }
-                Console.Write("Ошибка! Введите корректное значение: ");
-                success = int.TryParse(Console.ReadLine(), out num);
+                return num;
             }
-            return num;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла ошибка при вводе числа-фильтра: {ex.Message}");
+                return 0;
+            }
         }
 
         /// <summary>
@@ -55,18 +76,26 @@ namespace ClassLibrary
         /// <returns>Строка-фильтр</returns>
         public static string GetFilterString()
         {
-            Console.Write("Введите строку: ");
-            string? word = Console.ReadLine();
-            while (true)
+            try
             {
-                if (word != null)
+                Console.Write("Введите строку: ");
+                string? word = Console.ReadLine();
+                while (true)
                 {
-                    break;
+                    if (word != null)
+                    {
+                        break;
+                    }
+                    Console.Write("Ошибка! Введите корректную строку: ");
+                    word = Console.ReadLine();
                 }
-                Console.Write("Ошибка! Введите корректную строку: ");
-                word = Console.ReadLine();
+                return word;
             }
-            return word;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Произошла ошибка при вводе строки-фильтра: {ex.Message}");
+                return "";
+            }
         }
     }
 }
